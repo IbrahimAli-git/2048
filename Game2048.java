@@ -19,7 +19,8 @@ public class Game2048 extends Game {
 
 
     private void createGame(){
-
+        createNewNumber();
+        createNewNumber();
     }
 
     private void drawScene(){
@@ -29,4 +30,18 @@ public class Game2048 extends Game {
             }
         }
     }
+
+    private void createNewNumber(){
+        int x, y, z;
+        do {
+            x = getRandomNumber(SIDE);
+            y = getRandomNumber(SIDE);
+        } while (gameField[x][y] != 0);
+
+        z = getRandomNumber(10);
+
+        if (z == 9) gameField[x][y] = 4;
+        else gameField[x][y] = 2;
+    }
 }
+
