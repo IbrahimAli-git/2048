@@ -31,6 +31,34 @@ public class Game2048 extends Game {
         }
     }
 
+    @Override
+    public void onKeyPress(Key key) {
+        switch (key){
+            case UP: moveUp(); break;
+            case RIGHT: moveRight(); break;
+            case DOWN: moveDown(); break;
+            case LEFT: moveLeft(); break;
+        }
+    }
+
+    private void moveDown() {
+
+    }
+
+    private void moveRight() {
+
+    }
+
+    private void moveUp() {
+
+    }
+
+    private void moveLeft() {
+
+    }
+
+
+
     private void createNewNumber() {
         int x, y, z;
         do {
@@ -74,7 +102,7 @@ public class Game2048 extends Game {
     private boolean compressRow(int[] row){
         int[] tempArray = row.clone();
         boolean isChanged = false;
-        
+
         for (int i = 0; i < row.length - 1; i++) {
             for (int j = 0; j < row.length - 1 - i; j++) {
                 int current = row[j];
@@ -93,7 +121,7 @@ public class Game2048 extends Game {
     private boolean mergeRow(int[] row){
         int[] tempArray = row.clone();
         boolean isChanged = false;
-        
+
         for (int i = 0; i < row.length - 1; i++) {
             if (row[i] == row[i+1]){
                 row[i] += row[i+1];
@@ -101,7 +129,7 @@ public class Game2048 extends Game {
                 isChanged = true;
             }
         }
-        
+
         return isChanged;
     }
 }
