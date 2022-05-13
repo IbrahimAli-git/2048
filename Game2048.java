@@ -70,4 +70,25 @@ public class Game2048 extends Game {
            setCellValueEx(x, y, color, String.valueOf(value));
        }
     }
+
+    private boolean compressRow(int[] row){
+        int[] tempArray = row.clone();
+        for (int i = 0; i < row.length - 1; i++) {
+            for (int j = 0; j < row.length - 1 - i; j++) {
+                int current = row[j];
+                int temp = row[j + 1];
+                if (current == 0) {
+                    row[j] = temp;
+                    row[j + 1] = current;
+                }
+            }
+        }
+
+        for (int i = 0; i < row.length; i++) {
+            if (tempArray[i] != row[i]){
+                return true;
+            }
+        }
+        return false;
+    }
 }
