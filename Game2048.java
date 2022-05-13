@@ -73,6 +73,8 @@ public class Game2048 extends Game {
 
     private boolean compressRow(int[] row){
         int[] tempArray = row.clone();
+        boolean isChanged = false;
+        
         for (int i = 0; i < row.length - 1; i++) {
             for (int j = 0; j < row.length - 1 - i; j++) {
                 int current = row[j];
@@ -80,33 +82,26 @@ public class Game2048 extends Game {
                 if (current == 0) {
                     row[j] = temp;
                     row[j + 1] = current;
+                    isChanged = true;
                 }
             }
         }
 
-        for (int i = 0; i < row.length; i++) {
-            if (tempArray[i] != row[i]){
-                return true;
-            }
-        }
-        return false;
+        return isChanged;
     }
 
     private boolean mergeRow(int[] row){
         int[] tempArray = row.clone();
-
+        boolean isChanged = false;
+        
         for (int i = 0; i < row.length - 1; i++) {
             if (row[i] == row[i+1]){
                 row[i] += row[i+1];
                 row[i+1] = 0;
+                isChanged = true;
             }
         }
-
-        for (int i = 0; i < tempArray.length; i++) {
-            if (tempArray[i] != row[i]){
-                return true;
-            }
-        }
-        return false;
+        
+        return isChanged;
     }
 }
