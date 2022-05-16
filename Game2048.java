@@ -6,6 +6,7 @@ public class Game2048 extends Game {
     private static final int SIDE = 4;
     private int gameField[][] = new int[SIDE][SIDE];
     private boolean isGameStopped = false;
+    private int score = 0;
 
     public static void main(String[] args) {
 
@@ -20,6 +21,7 @@ public class Game2048 extends Game {
 
 
     private void createGame() {
+        gameField = new int[SIDE][SIDE];
         createNewNumber();
         createNewNumber();
     }
@@ -32,9 +34,16 @@ public class Game2048 extends Game {
         }
     }
 
+
     @Override
     public void onKeyPress(Key key) {
-        if (!canUserMove()){
+        if (isGameStopped){
+            if (key == Key.SPACE){
+                score = 0;
+                setScore(score);
+                restart();
+            }
+        } else if (!canUserMove()){
             gameOver();
         } else {
             switch (key) {
@@ -153,6 +162,12 @@ public class Game2048 extends Game {
         showMessageDialog(Color.WHITE, "You've lost", Color.BLACK, 75);
     }
 
+    private void restart() {
+        isGameStopped = false;
+        createGame();
+        drawScene();
+    }
+
     private boolean canUserMove() {
         boolean isMoveable = false;
         for (int i = 0; i < SIDE; i++) {
@@ -213,7 +228,6 @@ public class Game2048 extends Game {
     }
 
     private boolean compressRow(int[] row){
-        int[] tempArray = row.clone();
         boolean isChanged = false;
 
         for (int i = 0; i < row.length - 1; i++) {
@@ -232,13 +246,14 @@ public class Game2048 extends Game {
     }
 
     private boolean mergeRow(int[] row){
-        int[] tempArray = row.clone();
         boolean isChanged = false;
 
         for (int i = 0; i < row.length - 1; i++) {
             if (row[i] == row[i+1]){
                 row[i] += row[i+1];
                 row[i+1] = 0;
+                score += row[i];
+                setScore(score);
                 isChanged = true;
             }
         }
