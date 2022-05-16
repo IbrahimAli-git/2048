@@ -5,6 +5,7 @@ import com.codegym.engine.cell.*;
 public class Game2048 extends Game {
     private static final int SIDE = 4;
     private int gameField[][] = new int[SIDE][SIDE];
+    private boolean isGameStopped = false;
 
     public static void main(String[] args) {
 
@@ -33,14 +34,26 @@ public class Game2048 extends Game {
 
     @Override
     public void onKeyPress(Key key) {
-        switch (key){
-            case UP: moveUp(); break;
-            case RIGHT: moveRight(); break;
-            case DOWN: moveDown(); break;
-            case LEFT: moveLeft(); break;
-        }
-        if (key == Key.DOWN || key == Key.UP || key == Key.LEFT || key == Key.RIGHT){
-            drawScene();
+        if (!canUserMove()){
+            gameOver();
+        } else {
+            switch (key) {
+                case UP:
+                    moveUp();
+                    break;
+                case RIGHT:
+                    moveRight();
+                    break;
+                case DOWN:
+                    moveDown();
+                    break;
+                case LEFT:
+                    moveLeft();
+                    break;
+            }
+            if (key == Key.DOWN || key == Key.UP || key == Key.LEFT || key == Key.RIGHT) {
+                drawScene();
+            }
         }
     }
 
@@ -111,7 +124,66 @@ public class Game2048 extends Game {
 
         if (z == 9) gameField[x][y] = 4;
         else gameField[x][y] = 2;
+
+        if (getMaxTileValue() == 2048){
+            win();
+        }
     }
+
+    private int getMaxTileValue(){
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < SIDE; i++) {
+            for (int j = 0; j < SIDE; j++) {
+                if (gameField[i][j] > max){
+                    max = gameField[i][j];
+                }
+            }
+        }
+        return max;
+    }
+
+    private void win(){
+        isGameStopped = true;
+        showMessageDialog(Color.WHITE, "You've Won", Color.BLACK, 75);
+
+    }
+
+    private void gameOver(){
+        isGameStopped = true;
+        showMessageDialog(Color.WHITE, "You've lost", Color.BLACK, 75);
+    }
+
+    private boolean canUserMove() {
+        boolean isMoveable = false;
+        for (int i = 0; i < SIDE; i++) {
+            for (int j = 0; j < SIDE; j++) {
+                if (gameField[i][j] == 0){
+                    return true;
+                }
+
+                if ((i-1) > 0 && (gameField[i][j] == gameField[i-1][j])){
+                    return true;
+                }
+
+                if ((i+1) < SIDE && (gameField[i][j] == gameField[i+1][j]))
+                {
+                    return true;
+                }
+                //this checks for RIGHT
+                if ((j+1) < SIDE && (gameField[i][j] == gameField[i][j+1]))
+                {
+                    return true;
+                }
+                //this checks for LEFT
+                if ((j-1)>0 && (gameField[i][j] == gameField[i][j-1]))
+                {
+                    return true;
+                }
+            }
+        }
+        return isMoveable;
+    }
+
 
     private Color getColorByValue(int value) {
         switch (value){
